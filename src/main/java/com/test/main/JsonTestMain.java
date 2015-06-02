@@ -2,19 +2,16 @@ package com.test.main;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationConfig;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.test.model.ModelA;
 import com.test.model.ModelB;
 import com.test.view.ModelBWithModelAView;
-import com.test.view.ModelBWithModelAViewD;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,22 +35,31 @@ public class JsonTestMain {
 
         /* 2. Create object mapper */
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        objectMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        objectMapper.configure(SerializationFeature.WRAP_EXCEPTIONS, true);
+        objectMapper.configure(SerializationFeature.CLOSE_CLOSEABLE, true);
+        objectMapper.configure(SerializationFeature.FLUSH_AFTER_WRITE_VALUE, true);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, true);
+        objectMapper.configure(SerializationFeature.WRITE_CHAR_ARRAYS_AS_JSON_ARRAYS, true);
+        objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
+        objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        objectMapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
 
-        //objectMapper._serializationConfig._serFeatures = per features 1360828
-        //objectMapper._serializationConfig._mapperFeatures = 133055
+        objectMapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+        objectMapper.configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);
 
-        SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
-        Field _serFeatures = serializationConfig.getClass().getDeclaredField("_serFeatures");
-        _serFeatures.setAccessible(true);
-        _serFeatures.setInt(serializationConfig, 1360828);
-
-        Field _mapperFeatures = serializationConfig.getClass().getSuperclass().getSuperclass().getDeclaredField("_mapperFeatures");
-        _mapperFeatures.setAccessible(true);
-        _mapperFeatures.setInt(serializationConfig, 133055);
-
-        objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        objectMapper.configure(MapperFeature.USE_ANNOTATIONS, true);
+        objectMapper.configure(MapperFeature.AUTO_DETECT_CREATORS, true);
+        objectMapper.configure(MapperFeature.AUTO_DETECT_FIELDS, true);
+        objectMapper.configure(MapperFeature.AUTO_DETECT_GETTERS, true);
+        objectMapper.configure(MapperFeature.AUTO_DETECT_IS_GETTERS, true);
+        objectMapper.configure(MapperFeature.AUTO_DETECT_SETTERS, true);
+        objectMapper.configure(MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, false);
+        objectMapper.configure(MapperFeature.USE_GETTERS_AS_SETTERS, true);
+        objectMapper.configure(MapperFeature.CAN_OVERRIDE_ACCESS_MODIFIERS, true);
+        objectMapper.configure(MapperFeature.USE_STATIC_TYPING, true);
+        objectMapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, true);
 
         ByteArrayOutputStream outputContent = new ByteArrayOutputStream();
         JsonGenerator generanor = objectMapper.getFactory().createGenerator(outputContent, JsonEncoding.UTF8);

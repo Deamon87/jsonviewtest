@@ -1,14 +1,14 @@
 package com.test.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.test.view.ModelBView;
 import com.test.view.ModelBWithModelAView;
 
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonView;
 
 
-public class ModelB extends ModelBSuperClasss {
+public class ModelB {
 
     @JsonView(ModelBView.class)
     private String commonField1;
@@ -29,8 +29,8 @@ public class ModelB extends ModelBSuperClasss {
     }
 
     @JsonIgnore
-    @JsonView(ModelBWithModelAView.class)
     private List<ModelA> modelAList;
+    @JsonView(ModelBWithModelAView.class)
     public List<ModelA> getModelAList() {
         return modelAList;
     }
